@@ -337,31 +337,7 @@ for i,v in pairs(Players:GetChildren()) do
 			end
 		end)
 
-		Players.PlayerAdded:Connect(function(v1)
-			if v1 ~= plr then
-				local r
-
-				local PlayerToggle2 = AutoFarmFilter:Toggle(v1.Name, function(val)
-					if val then
-						table.insert(AutoFarmWhitelist,v1)
-					else
-						if table.find(AutoFarmWhitelist,v1) then
-							table.remove(AutoFarmWhitelist,table.find(AutoFarmWhitelist,v1))
-						end
-					end
-				end)
-
-				r = Players.PlayerRemoving:Connect(function(player)
-					if player2 == v1 then
-						PlayerToggle2:Remove()
-						if table.find(AutoFarmWhitelist,v1) then
-							table.remove(AutoFarmWhitelist,table.find(AutoFarmWhitelist,v1))
-							r:Disconnect()
-						end
-					end
-				end)
-			end
-		end)
+		
 
 		Players.PlayerRemoving:Connect(function(player)
 			if player == v then
@@ -373,6 +349,31 @@ for i,v in pairs(Players:GetChildren()) do
 		end)
 	end
 end
+
+Players.PlayerAdded:Connect(function(v1)
+	if v1 ~= plr then
+		local r
+
+		local PlayerToggle2 = AutoFarmFilter:Toggle(v1.Name, function(val)
+			if val then
+				table.insert(AutoFarmWhitelist,v1)
+			else
+				if table.find(AutoFarmWhitelist,v1) then
+					table.remove(AutoFarmWhitelist,table.find(AutoFarmWhitelist,v1))
+				end
+			end
+		end)
+
+		r = Players.PlayerRemoving:Connect(function(player)
+			if player2 == v1 then
+				PlayerToggle2:Remove()
+				if table.find(AutoFarmWhitelist,v1) then
+					table.remove(AutoFarmWhitelist,table.find(AutoFarmWhitelist,v1))
+				end
+			end
+		end)
+	end
+end)
 
 local AutoFarmSpeed = AutoFarmDropdown:Slider("CD", function(val)
 	AutoFarmSpeedV = val
