@@ -82,7 +82,7 @@ local function AutoFarm(on)
 						if CurrOnAutoFarm then
 							if player.Character and player.Character.isInArena.Value == true and player.Character.IsInDefaultArena.Value == false and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 and not table.find(AutoFarmWhitelist,player) then
 								plr.Character:MoveTo(player.Character.HumanoidRootPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * -2)
-								task.wait(0.1)
+								task.wait(0.05)
 
 								if CurrOnAutoFarm then
 
@@ -106,7 +106,10 @@ local function AutoFarm(on)
 										game:GetService("ReplicatedStorage"):WaitForChild("HitSwapper"):FireServer(player.Character.Torso)
 									elseif plr.leaderstats.Glove.Value == "Bull" then
 										game:GetService("ReplicatedStorage"):WaitForChild("BullHit"):FireServer(player.Character.Torso)
-										
+									elseif plr.leaderstats.Glove.Value == "Dice" then
+										game:GetService("ReplicatedStorage"):WaitForChild("DiceHit"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Ghost" then
+										game:GetService("ReplicatedStorage"):WaitForChild("GhostHit"):FireServer(player.Character.Torso)
 									end
 
 									task.wait(0.1)
