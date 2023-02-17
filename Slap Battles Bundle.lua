@@ -1,5 +1,3 @@
--- MADE BY FastTpService / PivotMakesCoolGames
-
 local Players = game:GetService("Players")
 local plr = game:GetService("Players").LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
@@ -343,7 +341,7 @@ for i,v in pairs(Players:GetChildren()) do
 			if v1 ~= plr then
 				local r
 
-				local PlayerToggle2 = AutoFarmFilter:Toggle(v.Name, function(val)
+				local PlayerToggle2 = AutoFarmFilter:Toggle(v1.Name, function(val)
 					if val then
 						table.insert(AutoFarmWhitelist,v1)
 					else
