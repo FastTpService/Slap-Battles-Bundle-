@@ -102,6 +102,11 @@ local function AutoFarm(on)
 										game:GetService("ReplicatedStorage"):WaitForChild("FlashHit"):FireServer(player.Character.Torso)
 									elseif plr.leaderstats.Glove.Value == "Spring" then
 										game:GetService("ReplicatedStorage"):WaitForChild("springhit"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Swapper" then
+										game:GetService("ReplicatedStorage"):WaitForChild("HitSwapper"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Bull" then
+										game:GetService("ReplicatedStorage"):WaitForChild("BullHit"):FireServer(player.Character.Torso)
+										
 									end
 
 									task.wait(0.1)
