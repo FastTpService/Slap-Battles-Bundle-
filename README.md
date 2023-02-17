@@ -1,7 +1,7 @@
 # Slap-Battles-Bundle-
 Slap Battles Bundle. 
 
--- MADE BY FastTpService --
+-- MADE BY FastTpService / PivotMakesCoolGames --
 -- CERBERUS UI LIBRARY USED. --
 
 -- THIS IS SLAP BATTLES BUNDLE. What is it? IT includes a bundle of different functions and cheats for Slap Battles in Roblox. 
