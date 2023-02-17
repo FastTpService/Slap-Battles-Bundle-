@@ -1,3 +1,5 @@
+-- MADE BY FastTpService / PivotMakesCoolGames
+
 local Players = game:GetService("Players")
 local plr = game:GetService("Players").LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
