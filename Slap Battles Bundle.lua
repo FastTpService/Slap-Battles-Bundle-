@@ -373,7 +373,7 @@ Players.PlayerAdded:Connect(function(v1)
 		end)
 
 		r = Players.PlayerRemoving:Connect(function(player)
-			if player2 == v1 then
+			if player == v1 then
 				PlayerToggle2:Remove()
 				if table.find(AutoFarmWhitelist,v1) then
 					table.remove(AutoFarmWhitelist,table.find(AutoFarmWhitelist,v1))
