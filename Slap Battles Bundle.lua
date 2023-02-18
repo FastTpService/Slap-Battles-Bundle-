@@ -80,7 +80,7 @@ local function AutoFarm(on)
 				while CurrOnAutoFarm do
 					for i,player in pairs(PlrsTable) do
 						if CurrOnAutoFarm then
-							if player.Character and player.Character.isInArena.Value == true and player.Character.IsInDefaultArena.Value == false and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 and not table.find(AutoFarmWhitelist,player) then
+							if player.Character and player.Character.isInArena.Value == true and player.Character.IsInDefaultArena.Value == false and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 and not table.find(AutoFarmWhitelist,player) and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
 								plr.Character:MoveTo(player.Character.HumanoidRootPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * -2)
 								task.wait(0.05)
 
@@ -377,9 +377,11 @@ Players.PlayerAdded:Connect(function(v1)
 				PlayerToggle2:Remove()
 				if table.find(AutoFarmWhitelist,v1) then
 					table.remove(AutoFarmWhitelist,table.find(AutoFarmWhitelist,v1))
+					r:Disconnect()
 				end
 			end
 		end)
+
 	end
 end)
 
