@@ -34,7 +34,7 @@ local function SlapAura(on)
 									if not table.find(SlapAuraWhitelist,player) then
 										if OnSlapAura then
 											
-											if plr.leaderstats.Glove.Value == "Default" or plr.leaderstats.Glove.Value == "Extended" then
+											if plr.leaderstats.Glove.Value == "Default" or plr.leaderstats.Glove.Value == "Extended" or plr.leaderstats.Glove.Value == ""  then
 												game:GetService("ReplicatedStorage"):WaitForChild("b"):FireServer(player.Character.Torso)
 											elseif plr.leaderstats.Glove.Value == "Diamond" then
 												game:GetService("ReplicatedStorage"):WaitForChild("DiamondHit"):FireServer(player.Character.Torso)
@@ -58,6 +58,14 @@ local function SlapAura(on)
 												game:GetService("ReplicatedStorage"):WaitForChild("DiceHit"):FireServer(player.Character.Torso)
 											elseif plr.leaderstats.Glove.Value == "Ghost" then
 												game:GetService("ReplicatedStorage"):WaitForChild("GhostHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Thanos" then
+												game:GetService("ReplicatedStorage"):WaitForChild("ThanosHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Stun" then
+												game:GetService("ReplicatedStorage"):WaitForChild("HtStun"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Za Hand" then
+												game:GetService("ReplicatedStorage"):WaitForChild("zhramt"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Fort" then
+												game:GetService("ReplicatedStorage"):WaitForChild("Fort"):FireServer(player.Character.Torso)
 											end
 											task.wait(SlapAuraSpeed)
 										end
@@ -172,6 +180,14 @@ local function AutoFarm(on)
 										game:GetService("ReplicatedStorage"):WaitForChild("DiceHit"):FireServer(player.Character.Torso)
 									elseif plr.leaderstats.Glove.Value == "Ghost" then
 										game:GetService("ReplicatedStorage"):WaitForChild("GhostHit"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Thanos" then
+										game:GetService("ReplicatedStorage"):WaitForChild("ThanosHit"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Stun" then
+										game:GetService("ReplicatedStorage"):WaitForChild("HtStun"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Za Hand" then
+										game:GetService("ReplicatedStorage"):WaitForChild("zhramt"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Fort" then
+										game:GetService("ReplicatedStorage"):WaitForChild("Fort"):FireServer(player.Character.Torso)
 									end
 
 									task.wait(0.15)
