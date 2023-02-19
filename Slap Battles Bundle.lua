@@ -26,6 +26,8 @@ local zzzsleepktoggle = false
 local brickktoggle = false
 local canspawnbrick = true
 
+local canMagnetS = true
+local magnetktoggle = false
 
 
 
@@ -75,6 +77,8 @@ local function SlapAura(on)
 												game:GetService("ReplicatedStorage"):WaitForChild("zhramt"):FireServer(player.Character.Torso)
 											elseif plr.leaderstats.Glove.Value == "Fort" then
 												game:GetService("ReplicatedStorage"):WaitForChild("Fort"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Magnet" then
+												game:GetService("ReplicatedStorage"):WaitForChild("MagnetHIT"):FireServer(player.Character.Torso)
 											end
 											task.wait(SlapAuraSpeed)
 										end
@@ -197,6 +201,8 @@ local function AutoFarm(on)
 										game:GetService("ReplicatedStorage"):WaitForChild("zhramt"):FireServer(player.Character.Torso)
 									elseif plr.leaderstats.Glove.Value == "Fort" then
 										game:GetService("ReplicatedStorage"):WaitForChild("Fort"):FireServer(player.Character.Torso)
+									elseif plr.leaderstats.Glove.Value == "Magnet" then
+										game:GetService("ReplicatedStorage"):WaitForChild("MagnetHIT"):FireServer(player.Character.Torso)
 									end
 
 									task.wait(0.15)
@@ -447,6 +453,150 @@ local GetPullG = PullDropdown:Button("Get", function()
 	GetGlove("Pull")
 end)
 
+
+local MagnetDropdown = GlovesSearchBar:Dropdown("Magnet") -- Args(<string> Name)
+
+local GetMagnetG = MagnetDropdown:Button("Get", function()
+	GetGlove("Magnet")
+end)
+
+local MagnetS = MagnetDropdown:Button("Magnet", function()
+	if canMagnetS and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		
+
+		local newAlignPosition = Instance.new("AlignPosition")
+		newAlignPosition.Parent = plr.Character.HumanoidRootPart
+		newAlignPosition.Mode = "OneAttachment"
+		
+		local att0 = Instance.new("Attachment")
+		att0.Parent = plr.Character.HumanoidRootPart
+		att0.WorldPosition = plr.Character.HumanoidRootPart.Position
+
+		local closest = nil
+		
+
+		local close = {}
+
+		for i,v in pairs(game.Players:GetChildren()) do
+			if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 and v.Character:FindFirstChild("isInArena") and v.Character.isInArena.Value == true then
+				if v ~= plr then
+					table.insert(close, (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude)
+				end
+			end
+		end
+
+		if #close > 1 then
+			local cls = math.min(table.unpack(close))
+
+			for i,v in pairs(game.Players:GetChildren()) do
+				if v ~= plr then
+					if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 and v.Character:FindFirstChild("isInArena") and v.Character.isInArena.Value == true then
+						if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude == cls then
+							closest = v
+						end
+					end
+				end
+			end
+		elseif #close > 0 then
+			closest = close[1]
+		end
+		
+		if closest then
+
+			newAlignPosition.Attachment0 = att0
+			newAlignPosition.Position = closest.Character.HumanoidRootPart.Position
+			newAlignPosition.MaxForce = 122312332113
+
+			plr.Character.Humanoid.Jump = true
+
+			canMagnetS = false
+
+			task.wait(1)
+
+			if att0 and newAlignPosition then
+				att0:Destroy()
+				newAlignPosition:Destroy()
+			end
+
+			task.wait(1)
+			canMagnetS = true
+		end
+	end
+end)
+
+local MagnetSKeybindD = MagnetDropdown:Dropdown("Keybind")
+
+local MagnetSKToggle = MagnetSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		magnetktoggle = true
+	else
+		magnetktoggle = false
+	end
+end)
+
+local MagnetKeybind = MagnetSKeybindD:Keybind("Key", function()
+	if canMagnetS and magnetktoggle and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		
+
+		local newAlignPosition = Instance.new("AlignPosition")
+		newAlignPosition.Parent = plr.Character.HumanoidRootPart
+		newAlignPosition.Mode = "OneAttachment"
+		
+		local att0 = Instance.new("Attachment")
+		att0.Parent = plr.Character.HumanoidRootPart
+		att0.WorldPosition = plr.Character.HumanoidRootPart.Position
+
+		local closest = nil
+		
+
+		local close = {}
+
+		for i,v in pairs(game.Players:GetChildren()) do
+			if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 and v.Character:FindFirstChild("isInArena") and v.Character.isInArena.Value == true then
+				if v ~= plr then
+					table.insert(close, (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude)
+				end
+			end
+		end
+
+		if #close > 1 then
+			local cls = math.min(table.unpack(close))
+
+			for i,v in pairs(game.Players:GetChildren()) do
+				if v ~= plr then
+					if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 and v.Character:FindFirstChild("isInArena") and v.Character.isInArena.Value == true then
+						if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude == cls then
+							closest = v
+						end
+					end
+				end
+			end
+		elseif #close > 0 then
+			closest = close[1]
+		end
+		
+		if closest then
+
+			newAlignPosition.Attachment0 = att0
+			newAlignPosition.Position = closest.Character.HumanoidRootPart.Position
+			newAlignPosition.MaxForce = 122312332113
+
+			plr.Character.Humanoid.Jump = true
+
+			canMagnetS = false
+
+			task.wait(1)
+
+			if att0 and newAlignPosition then
+				att0:Destroy()
+				newAlignPosition:Destroy()
+			end
+
+			task.wait(1)
+			canMagnetS = true
+		end
+	end
+end)
 
 
 local OrbitDropdown = GlovesSearchBar:Dropdown("Orbit") -- Args(<string> Name)
