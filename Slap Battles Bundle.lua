@@ -78,7 +78,7 @@ end
 
 local function AutoFarm(on)
 	if on then
-		if plr.Character and plr.Character.isInArena.Value == true then
+		if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character.Humanoid.Health > 0 then
 			local PlrsTable = {}
 
 			OnAutoFarm = true
@@ -384,7 +384,7 @@ local AutoFarmToggle = AutoFarmDropdown:Toggle("Toggle",function(val)
 	if val then
 		OnAutoFarm = val
 
-		print(1)
+		
 
 		AutoFarm(val)
 	else
@@ -547,11 +547,16 @@ end)
 local SlapAuraKeybind = SlapAuraDropdown:Keybind("Toggle Keybind", function()
 	if not OnSlapAura then
 		SlapAuraToggle:Set(true, function(val)
-			print(val)
+			OnSlapAura = true
+			
+			SlapAura(true)
+			
 		end)
 	else
 		SlapAuraToggle:Set(false, function(val)
-			print(val)
+			OnSlapAura = false
+			
+			SlapAura(false)
 		end)
 	end
 end, "X")
