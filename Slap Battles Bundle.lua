@@ -1,9 +1,12 @@
 local Players = game:GetService("Players")
 local plr = game:GetService("Players").LocalPlayer
+local plrGui = plr:WaitForChild("PlayerGui")
 local char = plr.Character or plr.CharacterAdded:Wait()
 
 local c
 local a,b
+
+local CanUseGloveFunction = true
 
 local OnAutoFarm = false
 local AutoFarmSpeedV = 0.6
@@ -16,7 +19,13 @@ local SlapAuraWhitelist = {}
 local orbitgloveson = false
 local orbitGlovesSpeedVal = 5
 
+local rockmodektoggle = false
+
 local zzzsleepktoggle = false
+
+local brickktoggle = false
+local canspawnbrick = true
+
 
 
 
@@ -317,31 +326,58 @@ window:LockScreenBoundaries(false) -- Args(<boolean> ConstrainToScreen)
 
 local Glovestab = window:Tab("Gloves") -- Args(<string> Name, <string?> TabImage)
 
+local GlovesSection = Glovestab:Section("Main")
 
-local sectionDefault = Glovestab:Section("Default Glove") -- Args(<string> Name)
+local GlovesTitle = GlovesSection:Title("Gloves")
 
-local DefaultTitle = sectionDefault:Title("Get Default Glove") -- Args(<string> Name) -- Args(<String> NewText)
+local GlovesSearchBar = GlovesSection:SearchBar("Search Gloves...")
 
-local GetDefaultG = sectionDefault:Button("Get", function()
+
+local DefaultDropdown = GlovesSearchBar:Dropdown("Default Glove") -- Args(<string> Name)
+
+local GetDefaultG = DefaultDropdown:Button("Get", function()
 	GetGlove("Default")
 end)
 
 
-local sectionZzz = Glovestab:Section("Zzz") -- Args(<string> Name)
+local DiamondDropdown = GlovesSearchBar:Dropdown("Diamond") -- Args(<string> Name)
 
-local ZzzGetTitle = sectionZzz:Title("Get Zzz Glove") -- Args(<string> Name) -- Args(<String> NewText)
+local GetDiamondG = DiamondDropdown:Button("Get", function()
+	GetGlove("Diamond")
+end)
 
-local GetZzzG = sectionZzz:Button("Get", function()
+local Rockmode = DiamondDropdown:Button("Rockmode", function()
+	game:GetService("ReplicatedStorage"):WaitForChild("Rockmode"):FireServer()
+end)
+
+local RockmodeKeybindD = DiamondDropdown:Dropdown("Keybind")
+
+local RockmodeKToggle = RockmodeKeybindD:Toggle("Toggle", function(val)
+	if val then
+		rockmodektoggle = true
+	else
+		rockmodektoggle = false
+	end
+end)
+
+local RocmodeKeybind = RockmodeKeybindD:Keybind("Key", function()
+	if rockmodektoggle then
+		game:GetService("ReplicatedStorage"):WaitForChild("Rockmode"):FireServer()
+	end
+end)
+
+
+local ZzzDropdown = GlovesSearchBar:Dropdown("Zzz") -- Args(<string> Name)
+
+local GetZzzG = ZzzDropdown:Button("Get", function()
 	GetGlove("ZZZZZZZ")
 end)
 
-local ZzzTitle = sectionZzz:Title("Sleep Farm") -- Args(<string> Name) -- Args(<String> NewText)
-
-local Sleep = sectionZzz:Button("Sleep", function()
+local Sleep = ZzzDropdown:Button("Sleep", function()
 	game:GetService("ReplicatedStorage"):WaitForChild("ZZZZZZZSleep"):FireServer()
 end)
 
-local SleepKeybindD = sectionZzz:Dropdown("Keybind")
+local SleepKeybindD = ZzzDropdown:Dropdown("Keybind")
 
 local SleepKToggle = SleepKeybindD:Toggle("Toggle", function(val)
 	if val then
@@ -356,20 +392,73 @@ local SleepKeybind = SleepKeybindD:Keybind("Key", function()
 end)
 
 
-local sectionOrbit = Glovestab:Section("Orbit") -- Args(<string> Name)
+local ExtendedDropdown = GlovesSearchBar:Dropdown("Extended") -- Args(<string> Name)
 
-local OrbitGetTitle = sectionOrbit:Title("Get Orbit") -- Args(<string> Name) -- Args(<String> NewText)
+local GetExtendedG = ExtendedDropdown:Button("Get", function()
+	GetGlove("Extended")
+end)
 
-local OrbitGetButton = sectionOrbit:Button("Get", function()
+
+local BrickDropdown = GlovesSearchBar:Dropdown("Brick") -- Args(<string> Name)
+
+local GetBrickG = BrickDropdown:Button("Get", function()
+	GetGlove("Brick")
+end)
+
+local BrickSpawn = BrickDropdown:Button("Spawn Brick", function()
+	if canspawnbrick then
+		game:GetService("ReplicatedStorage"):WaitForChild("lbrick"):FireServer()
+		canspawnbrick = false
+		task.wait(5)
+		canspawnbrick = true
+	end
+end)
+
+local BrickSpawnKeybindD = BrickDropdown:Dropdown("Keybind")
+
+local BrickKToggle = BrickSpawnKeybindD:Toggle("Toggle", function(val)
+	if val then
+		brickktoggle = true
+	else
+		brickktoggle = false
+	end
+end)
+
+local BrickKeybind = BrickSpawnKeybindD:Keybind("Key", function()
+	if canspawnbrick and brickktoggle then
+		game:GetService("ReplicatedStorage"):WaitForChild("lbrick"):FireServer()
+		canspawnbrick = false
+		task.wait(5)
+		canspawnbrick = true
+	end
+end)
+
+
+local SnowDropdown = GlovesSearchBar:Dropdown("Snow") -- Args(<string> Name)
+
+local GetSnowG = SnowDropdown:Button("Get", function()
+	GetGlove("Snow")
+end)
+
+
+local PullDropdown = GlovesSearchBar:Dropdown("Pull") -- Args(<string> Name)
+
+local GetPullG = PullDropdown:Button("Get", function()
+	GetGlove("Pull")
+end)
+
+
+
+local OrbitDropdown = GlovesSearchBar:Dropdown("Orbit") -- Args(<string> Name)
+
+local OrbitGetButton = OrbitDropdown:Button("Get", function()
 	GetGlove("Orbit")
 end)
 
-local OrbitTitle = sectionOrbit:Title("Gloves") -- Args(<string> Name) -- Args(<String> NewText)
-
-local GlovesDropdown = sectionOrbit:Dropdown("Gloves Speed")
+local OrbitGlovesDropdown = OrbitDropdown:Dropdown("Gloves Speed")
 
 
-local GlovesToggle = GlovesDropdown:Toggle("Enable", function(bool)
+local GlovesToggle = OrbitGlovesDropdown:Toggle("Enable", function(bool)
 	if bool then
 		orbitgloveson = true
 		OrbitGlovesSpeed(orbitGlovesSpeedVal,true)
@@ -380,7 +469,7 @@ local GlovesToggle = GlovesDropdown:Toggle("Enable", function(bool)
 	end
 end)
 
-GlovesDropdown:Slider("Speed", function(val)
+OrbitGlovesDropdown:Slider("Speed", function(val)
 	orbitGlovesSpeedVal = val
 	OrbitGlovesSpeed(val,orbitgloveson)
 end) -- Args(<String> Name, <Function> Callback, <Number?> MaximumValue, <Number?> MinimumValue)
