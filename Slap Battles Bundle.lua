@@ -33,7 +33,7 @@ local function SlapAura(on)
 								if (player.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude < 10 then
 									if not table.find(SlapAuraWhitelist,player) then
 										if OnSlapAura then
-											print(33)
+											
 											if plr.leaderstats.Glove.Value == "Default" or plr.leaderstats.Glove.Value == "Extended" then
 												game:GetService("ReplicatedStorage"):WaitForChild("b"):FireServer(player.Character.Torso)
 											elseif plr.leaderstats.Glove.Value == "Diamond" then
@@ -456,9 +456,18 @@ end)
 
 local AutoFarmKeybind = AutoFarmDropdown:Keybind("Toggle Keybind", function()
 	if not OnAutoFarm then
-		AutoFarmToggle:Set(true)
+		AutoFarmToggle:Set(true, function(val)
+			OnAutoFarm= true
+			
+			AutoFarm(true)
+			
+		end)
 	else
-		AutoFarmToggle:Set(false)
+		AutoFarmToggle:Set(false, function(val)
+			OnAutoFarm = false
+			
+			AutoFarm(false)
+		end)
 	end
 end, "Z")
 
