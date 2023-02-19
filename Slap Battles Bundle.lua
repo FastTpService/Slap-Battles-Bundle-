@@ -11,6 +11,7 @@ local AutoFarmWhitelist = {}
 
 local OnSlapAura = false
 local SlapAuraSpeed = 0.5
+local SlapAuraWhitelist = {}
 
 local orbitgloveson = false
 local orbitGlovesSpeedVal = 5
@@ -19,7 +20,61 @@ local zzzsleepktoggle = false
 
 
 
-
+local function SlapAura(on)
+	if on then
+		OnSlapAura = true
+		coroutine.wrap(function()
+			while OnSlapAura do
+				task.wait()
+				if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+					for i,player in pairs(Players:GetChildren()) do
+						if plr ~= player then
+							if player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 and player.Character:FindFirstChild("isInArena") and player.Character.isInArena.Value == true and player.Character:FindFirstChild("HumanoidRootPart") then
+								if (player.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude < 10 then
+									if not table.find(SlapAuraWhitelist,player) then
+										if OnSlapAura then
+											print(33)
+											if plr.leaderstats.Glove.Value == "Default" or plr.leaderstats.Glove.Value == "Extended" then
+												game:GetService("ReplicatedStorage"):WaitForChild("b"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Diamond" then
+												game:GetService("ReplicatedStorage"):WaitForChild("DiamondHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "ZZZZZZZ" then
+												game:GetService("ReplicatedStorage"):WaitForChild("ZZZZZZZHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Brick" then
+												game:GetService("ReplicatedStorage"):WaitForChild("BrickHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Snow" then
+												game:GetService("ReplicatedStorage"):WaitForChild("SnowHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Pull" then
+												game:GetService("ReplicatedStorage"):WaitForChild("PullHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Flash" then
+												game:GetService("ReplicatedStorage"):WaitForChild("FlashHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Spring" then
+												game:GetService("ReplicatedStorage"):WaitForChild("springhit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Swapper" then
+												game:GetService("ReplicatedStorage"):WaitForChild("HitSwapper"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Bull" then
+												game:GetService("ReplicatedStorage"):WaitForChild("BullHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Dice" then
+												game:GetService("ReplicatedStorage"):WaitForChild("DiceHit"):FireServer(player.Character.Torso)
+											elseif plr.leaderstats.Glove.Value == "Ghost" then
+												game:GetService("ReplicatedStorage"):WaitForChild("GhostHit"):FireServer(player.Character.Torso)
+											end
+											task.wait(SlapAuraSpeed)
+										end
+									end
+								end
+							end
+						end
+						
+					end
+				end
+			
+			end
+		end)()
+	else
+		OnSlapAura = false
+	end
+end
 
 local function AutoFarm(on)
 	if on then
@@ -81,8 +136,15 @@ local function AutoFarm(on)
 					for i,player in pairs(PlrsTable) do
 						if CurrOnAutoFarm then
 							if player.Character and player.Character.isInArena.Value == true and player.Character.IsInDefaultArena.Value == false and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 and not table.find(AutoFarmWhitelist,player) and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+								local Do = true
 								plr.Character:MoveTo(player.Character.HumanoidRootPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * -2)
-								task.wait(0.05)
+								coroutine.wrap(function()
+									while Do and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 do
+										task.wait()
+										plr.Character:MoveTo(player.Character.HumanoidRootPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * -2)
+									end
+								end)()
+								task.wait(0.1)
 
 								if CurrOnAutoFarm then
 
@@ -112,8 +174,9 @@ local function AutoFarm(on)
 										game:GetService("ReplicatedStorage"):WaitForChild("GhostHit"):FireServer(player.Character.Torso)
 									end
 
-									task.wait(0.1)
-								else break 
+									task.wait(0.15)
+									Do = false
+								else Do = false break 
 								
 								end
 
@@ -124,7 +187,7 @@ local function AutoFarm(on)
 						if AutoFarmSpeedV ~= 0 then
 							task.wait(AutoFarmSpeedV * 0.5)
 						else
-							 task.wait(AutoFarmSpeedV + 0.2)
+							 task.wait(AutoFarmSpeedV + 0.3)
 						end
 					end
 					
@@ -331,6 +394,12 @@ local AutoFarmToggle = AutoFarmDropdown:Toggle("Toggle",function(val)
 	end
 end)
 
+
+
+local AutoFarmSpeed = AutoFarmDropdown:Slider("CD", function(val)
+	AutoFarmSpeedV = val
+end, 2,0)
+
 local AutoFarmFilter = AutoFarmDropdown:SearchBar("Whitelist")
 
 for i,v in pairs(Players:GetChildren()) do
@@ -385,9 +454,13 @@ Players.PlayerAdded:Connect(function(v1)
 	end
 end)
 
-local AutoFarmSpeed = AutoFarmDropdown:Slider("CD", function(val)
-	AutoFarmSpeedV = val
-end, 2,1)
+local AutoFarmKeybind = AutoFarmDropdown:Keybind("Toggle Keybind", function()
+	if not OnAutoFarm then
+		AutoFarmToggle:Set(true)
+	else
+		AutoFarmToggle:Set(false)
+	end
+end, "Z")
 
 
 local SlapAuraTitle = MainAbSection:Title("Slap Aura")
@@ -398,17 +471,87 @@ local SlapAuraToggle = SlapAuraDropdown:Toggle("Toggle",function(val)
 	if val then
 		OnSlapAura = val
 
-		
+		SlapAura(val)
 	else
 		OnSlapAura = val
 
-		
+		SlapAura(val)
 	end
 end)
 
 
 local SlapAuraSpeedS = SlapAuraDropdown:Slider("CD (0 = 0.2,1 = 0.5, 2 = 1; etc.)", function(val)
-	local num = val
-	if num > 0.5 and num < 3 then
+	local num = val * 0.5
+
+	if num == 0 then
+		num = 0.2
+	end
+	if num > 0.1 and num < 3 then
 	end
 end, 2,0)
+
+local SlapAuraFilter = SlapAuraDropdown:SearchBar("Whitelist")
+
+for i,v in pairs(Players:GetChildren()) do
+	if v ~= plr then
+		local PlayerToggle = SlapAuraFilter:Toggle(v.Name, function(val)
+			if val then
+				table.insert(SlapAuraWhitelist,v)
+			else
+				if table.find(SlapAuraWhitelist,v) then
+					table.remove(SlapAuraWhitelist,table.find(SlapAuraWhitelist,v))
+				end
+			end
+		end)
+
+		
+
+		Players.PlayerRemoving:Connect(function(player)
+			if player == v then
+				PlayerToggle:Remove()
+				if table.find(SlapAuraWhitelist,v) then
+					table.remove(SlapAuraWhitelist,table.find(SlapAuraWhitelist,v))
+				end
+			end
+		end)
+	end
+end
+
+Players.PlayerAdded:Connect(function(v1)
+	if v1 ~= plr then
+		local r
+
+		local PlayerToggle2 = SlapAuraFilter:Toggle(v1.Name, function(val)
+			if val then
+				table.insert(SlapAuraWhitelist,v1)
+			else
+				if table.find(SlapAuraWhitelist,v1) then
+					table.remove(SlapAuraWhitelist,table.find(SlapAuraWhitelist,v1))
+				end
+			end
+		end)
+
+		r = Players.PlayerRemoving:Connect(function(player)
+			if player == v1 then
+				PlayerToggle2:Remove()
+				if table.find(SlapAuraWhitelist,v1) then
+					table.remove(SlapAuraWhitelist,table.find(SlapAuraWhitelist,v1))
+					r:Disconnect()
+				end
+			end
+		end)
+
+	end
+end)
+
+local SlapAuraKeybind = SlapAuraDropdown:Keybind("Toggle Keybind", function()
+	if not OnSlapAura then
+		SlapAuraToggle:Set(true, function(val)
+			print(val)
+		end)
+	else
+		SlapAuraToggle:Set(false, function(val)
+			print(val)
+		end)
+	end
+end, "X")
