@@ -39,6 +39,10 @@ local canUseSLOC = true
 local toggleksloc = false
 local SLOCSP = false
 
+local canUseGInvis = true
+local usinginvis = false
+local ghostktoggle = false
+
 
 
 local function SlapAura(on)
@@ -437,7 +441,7 @@ local BrickSpawn = BrickDropdown:Button("Spawn Brick", function()
 	if canspawnbrick then
 		game:GetService("ReplicatedStorage"):WaitForChild("lbrick"):FireServer()
 		canspawnbrick = false
-		task.wait(5)
+		task.wait(1.3)
 		canspawnbrick = true
 	end
 end)
@@ -456,7 +460,7 @@ local BrickKeybind = BrickSpawnKeybindD:Keybind("Key", function()
 	if canspawnbrick and brickktoggle then
 		game:GetService("ReplicatedStorage"):WaitForChild("lbrick"):FireServer()
 		canspawnbrick = false
-		task.wait(5)
+		task.wait(1.3)
 		canspawnbrick = true
 	end
 end)
@@ -557,6 +561,225 @@ local SpringKeybind = SpringSKeybindD:Keybind("Key", function()
 end)
 
 
+local SwapperDropdown = SlapsGlovesSearchBar:Dropdown("Swapper") -- Args(<string> Name)
+
+local GetSwapperG = SwapperDropdown:Button("Get", function()
+	GetGlove("Swapper")
+end)
+
+local SLOC = SwapperDropdown:Button("Swap Positions", function()
+	if canUseSLOC and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		local pos = plr.Character.HumanoidRootPart.Position
+
+		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
+
+		canUseSLOC = false
+
+		if SLOCSP then
+			task.wait(0.2)
+			plr.Character:MoveTo(pos)
+		end
+
+
+		task.wait(6.5)
+
+		canUseSLOC = true
+	end
+end)
+
+SwapperDropdown:Toggle("Save Position", function(val)
+	SLOCSP = val
+end)
+
+local SwapperSKeybindD = SwapperDropdown:Dropdown("Keybind")
+
+local SwapperSKToggle = SwapperSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		swapperktoggle = true
+	else
+		swapperktoggle = false
+	end
+end)
+
+local SwapperKeybind = SwapperSKeybindD:Keybind("Key", function()
+	if swapperktoggle and canUseSLOC and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		local pos = plr.Character.HumanoidRootPart.Position
+
+		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
+
+		canUseSLOC = false
+
+		if SLOCSP then
+			task.wait(0.2)
+			plr.Character:MoveTo(pos)
+		end
+
+		
+
+		task.wait(6.5)
+
+		canUseSLOC = true
+	end
+end)
+
+
+local BullDropdown = SlapsGlovesSearchBar:Dropdown("Bull") -- Args(<string> Name)
+
+local GetBullG = BullDropdown:Button("Get", function()
+	GetGlove("Bull")
+end)
+
+
+local DiceDropdown = SlapsGlovesSearchBar:Dropdown("Dice") -- Args(<string> Name)
+
+local GetDiceG = DiceDropdown:Button("Get", function()
+	GetGlove("Dice")
+end)
+
+
+local GhostDropdown = SlapsGlovesSearchBar:Dropdown("Ghost") -- Args(<string> Name)
+
+local GetGhostG = GhostDropdown:Button("Get", function()
+	GetGlove("Ghost")
+end)
+
+local GhostInvis = GhostDropdown:Button("Invisibility", function()
+	if canUseGInvis and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		if not usinginvis then
+			local kk
+
+			game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilityactivated"):FireServer()
+
+			canUseGInvis = false
+			usinginvis = true
+
+			kk = plr.Character.Humanoid.Died:Connect(function()
+				usinginvis = false
+				kk:Disconnect()
+			end)
+
+			task.wait(1)
+
+			canUseGInvis = true
+		else
+			local kk
+
+			game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilitydeactivated"):FireServer()
+
+			canUseGInvis = false
+			usinginvis = false
+
+
+			task.wait(3)
+
+			canUseGInvis = true
+		end
+	end
+end)
+
+local GhostSKeybindD = GhostDropdown:Dropdown("Keybind")
+
+local GhostSKToggle = GhostSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		ghostktoggle = true
+	else
+		ghostktoggle = false
+	end
+end)
+
+local GhostKeybind = GhostSKeybindD:Keybind("Key", function()
+	if ghostktoggle and canUseGInvis and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		if not usinginvis then
+			local kk
+
+			game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilityactivated"):FireServer()
+
+			canUseGInvis = false
+			usinginvis = true
+
+			kk = plr.Character.Humanoid.Died:Connect(function()
+				usinginvis = false
+				kk:Disconnect()
+			end)
+
+			task.wait(1)
+
+			canUseGInvis = true
+		else
+			local kk
+
+			game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilitydeactivated"):FireServer()
+
+			canUseGInvis = false
+			usinginvis = false
+
+
+			task.wait(3)
+
+			canUseGInvis = true
+		end
+	end
+end)
+
+
+local ThanosDropdown = SlapsGlovesSearchBar:Dropdown("Thanos") -- Args(<string> Name)
+
+local GetThanosG = GhostDropdown:Button("Get", function()
+	GetGlove("Thanos")
+end)
+
+local ThanosSetPoint = ThanosDropdown:Button("Set Point", function()
+	if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		
+	end
+end)
+
+local GhostSKeybindD = GhostDropdown:Dropdown("Keybind")
+
+local GhostSKToggle = GhostSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		ghostktoggle = true
+	else
+		ghostktoggle = false
+	end
+end)
+
+local GhostKeybind = GhostSKeybindD:Keybind("Key", function()
+	if ghostktoggle and canUseGInvis and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		if not usinginvis then
+			local kk
+
+			game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilityactivated"):FireServer()
+
+			canUseGInvis = false
+			usinginvis = true
+
+			kk = plr.Character.Humanoid.Died:Connect(function()
+				usinginvis = false
+				kk:Disconnect()
+			end)
+
+			task.wait(1)
+
+			canUseGInvis = true
+		else
+			local kk
+
+			game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilitydeactivated"):FireServer()
+
+			canUseGInvis = false
+			usinginvis = false
+
+
+			task.wait(3)
+
+			canUseGInvis = true
+		end
+	end
+end)
+
+
+
 local MagnetDropdown = SlapsGlovesSearchBar:Dropdown("Magnet") -- Args(<string> Name)
 
 local GetMagnetG = MagnetDropdown:Button("Get", function()
@@ -626,70 +849,6 @@ local MagnetS = MagnetDropdown:Button("Magnet", function()
 		end
 	end
 end)
-
-
-local SwapperDropdown = SlapsGlovesSearchBar:Dropdown("Swapper") -- Args(<string> Name)
-
-local GetSwapperG = SwapperDropdown:Button("Get", function()
-	GetGlove("Swapper")
-end)
-
-local SLOC = SwapperDropdown:Button("Swap Positions", function()
-	if canUseSLOC and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-		local pos = plr.Character.HumanoidRootPart.Position
-
-		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
-
-		canUseSLOC = false
-
-		if SLOCSP then
-			task.wait(0.2)
-			plr.Character:MoveTo(pos)
-		end
-
-
-		task.wait(6.5)
-
-		canUseSLOC = true
-	end
-end)
-
-SwapperDropdown:Toggle("Save Position", function(val)
-	SLOCSP = val
-end)
-
-local SwapperSKeybindD = SwapperDropdown:Dropdown("Keybind")
-
-local SwapperSKToggle = SwapperSKeybindD:Toggle("Toggle", function(val)
-	if val then
-		swapperktoggle = true
-	else
-		swapperktoggle = false
-	end
-end)
-
-local SwapperKeybind = SwapperSKeybindD:Keybind("Key", function()
-	if swapperktoggle and canUseSLOC and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-		local pos = plr.Character.HumanoidRootPart.Position
-
-		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
-
-		canUseSLOC = false
-
-		if SLOCSP then
-			task.wait(0.2)
-			plr.Character:MoveTo(pos)
-		end
-
-		
-
-		task.wait(6.5)
-
-		canUseSLOC = true
-	end
-end)
-
-
 
 local MagnetSKeybindD = MagnetDropdown:Dropdown("Keybind")
 
