@@ -29,6 +29,10 @@ local canspawnbrick = true
 local canMagnetS = true
 local magnetktoggle = false
 
+local canFlashS = true
+local flashktoggle = false
+local flashLenght = 25
+
 
 
 local function SlapAura(on)
@@ -332,21 +336,33 @@ window:LockScreenBoundaries(false) -- Args(<boolean> ConstrainToScreen)
 
 local Glovestab = window:Tab("Gloves") -- Args(<string> Name, <string?> TabImage)
 
+local AbilitiesTab = window:Tab("Abilities") -- Args(<string> Name, <string?> TabImage)
+
+local MainAbSection = AbilitiesTab:Section("Main")
+
 local GlovesSection = Glovestab:Section("Main")
 
-local GlovesTitle = GlovesSection:Title("Gloves")
+GlovesSection:Title("Slaps Gloves")
 
-local GlovesSearchBar = GlovesSection:SearchBar("Search Gloves...")
+local SlapsGlovesSearchBar = GlovesSection:SearchBar("Search Slaps Gloves...")
+
+GlovesSection:Title("Badge Gloves")
+
+local BadgeGlovesSearchBar = GlovesSection:SearchBar("Search Badge Gloves...")
+
+GlovesSection:Title("Robux Gloves")
+
+local RobuxGlovesSearchBar = GlovesSection:SearchBar("Search Robux Gloves...")
 
 
-local DefaultDropdown = GlovesSearchBar:Dropdown("Default Glove") -- Args(<string> Name)
+local DefaultDropdown = SlapsGlovesSearchBar:Dropdown("Default Glove") -- Args(<string> Name)
 
 local GetDefaultG = DefaultDropdown:Button("Get", function()
 	GetGlove("Default")
 end)
 
 
-local DiamondDropdown = GlovesSearchBar:Dropdown("Diamond") -- Args(<string> Name)
+local DiamondDropdown = SlapsGlovesSearchBar:Dropdown("Diamond") -- Args(<string> Name)
 
 local GetDiamondG = DiamondDropdown:Button("Get", function()
 	GetGlove("Diamond")
@@ -373,7 +389,7 @@ local RocmodeKeybind = RockmodeKeybindD:Keybind("Key", function()
 end)
 
 
-local ZzzDropdown = GlovesSearchBar:Dropdown("Zzz") -- Args(<string> Name)
+local ZzzDropdown = SlapsGlovesSearchBar:Dropdown("Zzz") -- Args(<string> Name)
 
 local GetZzzG = ZzzDropdown:Button("Get", function()
 	GetGlove("ZZZZZZZ")
@@ -398,14 +414,14 @@ local SleepKeybind = SleepKeybindD:Keybind("Key", function()
 end)
 
 
-local ExtendedDropdown = GlovesSearchBar:Dropdown("Extended") -- Args(<string> Name)
+local ExtendedDropdown = SlapsGlovesSearchBar:Dropdown("Extended") -- Args(<string> Name)
 
 local GetExtendedG = ExtendedDropdown:Button("Get", function()
 	GetGlove("Extended")
 end)
 
 
-local BrickDropdown = GlovesSearchBar:Dropdown("Brick") -- Args(<string> Name)
+local BrickDropdown = SlapsGlovesSearchBar:Dropdown("Brick") -- Args(<string> Name)
 
 local GetBrickG = BrickDropdown:Button("Get", function()
 	GetGlove("Brick")
@@ -440,21 +456,21 @@ local BrickKeybind = BrickSpawnKeybindD:Keybind("Key", function()
 end)
 
 
-local SnowDropdown = GlovesSearchBar:Dropdown("Snow") -- Args(<string> Name)
+local SnowDropdown = SlapsGlovesSearchBar:Dropdown("Snow") -- Args(<string> Name)
 
 local GetSnowG = SnowDropdown:Button("Get", function()
 	GetGlove("Snow")
 end)
 
 
-local PullDropdown = GlovesSearchBar:Dropdown("Pull") -- Args(<string> Name)
+local PullDropdown = SlapsGlovesSearchBar:Dropdown("Pull") -- Args(<string> Name)
 
 local GetPullG = PullDropdown:Button("Get", function()
 	GetGlove("Pull")
 end)
 
 
-local MagnetDropdown = GlovesSearchBar:Dropdown("Magnet") -- Args(<string> Name)
+local MagnetDropdown = SlapsGlovesSearchBar:Dropdown("Magnet") -- Args(<string> Name)
 
 local GetMagnetG = MagnetDropdown:Button("Get", function()
 	GetGlove("Magnet")
@@ -577,15 +593,26 @@ local MagnetKeybind = MagnetSKeybindD:Keybind("Key", function()
 		
 		if closest then
 
+			local magnet = true
+
 			newAlignPosition.Attachment0 = att0
-			newAlignPosition.Position = closest.Character.HumanoidRootPart.Position
+		
 			newAlignPosition.MaxForce = 122312332113
 
 			plr.Character.Humanoid.Jump = true
 
+			coroutine.wrap(function()
+				while magnet do
+					newAlignPosition.Position = closest.Character.HumanoidRootPart.Position
+					task.wait()
+				end
+			end)()
+
 			canMagnetS = false
 
 			task.wait(1)
+
+			magnet = false
 
 			if att0 and newAlignPosition then
 				att0:Destroy()
@@ -599,7 +626,51 @@ local MagnetKeybind = MagnetSKeybindD:Keybind("Key", function()
 end)
 
 
-local OrbitDropdown = GlovesSearchBar:Dropdown("Orbit") -- Args(<string> Name)
+local FlashDropdown = SlapsGlovesSearchBar:Dropdown("Flash") -- Args(<string> Name)
+
+local GetFlashG = FlashDropdown:Button("Get", function()
+	GetGlove("Flash")
+end)
+
+local FlashS = FlashDropdown:Button("Flash Teleport", function()
+	if canFlashS and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		game:GetService("ReplicatedStorage"):WaitForChild("FlashTeleport"):FireServer()
+		canFlashS = false
+		task.wait(0.5)
+		plr.Character:MoveTo(plr.Character.HumanoidRootPart.Position + plr.Character.HumanoidRootPart.CFrame.LookVector * flashLenght)
+		task.wait(3)
+		canFlashS = true
+	end
+end)
+
+local FlashLenght = FlashDropdown:Slider("Lenght", function(val)
+	flashLenght = val
+end, 60,5)
+
+local FlashSKeybindD = FlashDropdown:Dropdown("Keybind")
+
+local FlashSKToggle = FlashSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		flashktoggle = true
+	else
+		flashktoggle = false
+	end
+end)
+
+local FlashKeybind = FlashSKeybindD:Keybind("Key", function()
+	if canFlashS and flashktoggle and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		game:GetService("ReplicatedStorage"):WaitForChild("FlashTeleport"):FireServer()
+		canFlashS = false
+		task.wait(0.5)
+		plr.Character:MoveTo(plr.Character.HumanoidRootPart.Position + plr.Character.HumanoidRootPart.CFrame.LookVector * flashLenght)
+		task.wait(3)
+		canFlashS = true
+	end
+end)
+
+
+
+local OrbitDropdown = BadgeGlovesSearchBar:Dropdown("Orbit") -- Args(<string> Name)
 
 local OrbitGetButton = OrbitDropdown:Button("Get", function()
 	GetGlove("Orbit")
@@ -624,11 +695,6 @@ OrbitGlovesDropdown:Slider("Speed", function(val)
 	OrbitGlovesSpeed(val,orbitgloveson)
 end) -- Args(<String> Name, <Function> Callback, <Number?> MaximumValue, <Number?> MinimumValue)
 
-
-
-local AbilitiesTab = window:Tab("Abilities") -- Args(<string> Name, <string?> TabImage)
-
-local MainAbSection = AbilitiesTab:Section("Main")
 
 
 local AutoFarmTitle = MainAbSection:Title("Slaps Auto Farm")
