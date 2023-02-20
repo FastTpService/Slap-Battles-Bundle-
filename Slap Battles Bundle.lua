@@ -33,6 +33,12 @@ local canFlashS = true
 local flashktoggle = false
 local flashLenght = 25
 
+local springktoggle = false
+
+local canUseSLOC = true
+local toggleksloc = false
+local SLOCSP = false
+
 
 
 local function SlapAura(on)
@@ -470,6 +476,87 @@ local GetPullG = PullDropdown:Button("Get", function()
 end)
 
 
+local FlashDropdown = SlapsGlovesSearchBar:Dropdown("Flash") -- Args(<string> Name)
+
+local GetFlashG = FlashDropdown:Button("Get", function()
+	GetGlove("Flash")
+end)
+
+local FlashS = FlashDropdown:Button("Flash Teleport", function()
+	if canFlashS and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		game:GetService("ReplicatedStorage"):WaitForChild("FlashTeleport"):FireServer()
+		canFlashS = false
+		task.wait(0.5)
+		plr.Character:MoveTo(plr.Character.HumanoidRootPart.Position + plr.Character.HumanoidRootPart.CFrame.LookVector * flashLenght)
+		task.wait(1.5)
+		canFlashS = true
+	end
+end)
+
+local FlashLenght = FlashDropdown:Slider("Lenght in studs", function(val)
+	flashLenght = val
+end, 70,5)
+
+local FlashSKeybindD = FlashDropdown:Dropdown("Keybind")
+
+local FlashSKToggle = FlashSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		flashktoggle = true
+	else
+		flashktoggle = false
+	end
+end)
+
+local FlashKeybind = FlashSKeybindD:Keybind("Key", function()
+	if canFlashS and flashktoggle and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		game:GetService("ReplicatedStorage"):WaitForChild("FlashTeleport"):FireServer()
+		canFlashS = false
+		task.wait(0.5)
+		plr.Character:MoveTo(plr.Character.HumanoidRootPart.Position + plr.Character.HumanoidRootPart.CFrame.LookVector * flashLenght)
+		task.wait(1.5)
+		canFlashS = true
+	end
+end)
+
+
+local SpringDropdown = SlapsGlovesSearchBar:Dropdown("Spring") -- Args(<string> Name)
+
+local GetSpringG = SpringDropdown:Button("Get", function()
+	GetGlove("Spring")
+end)
+
+local SpringSound = SpringDropdown:Button("Spring Sound", function()
+	if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		game:GetService("ReplicatedStorage"):WaitForChild("SpringJump"):FireServer()
+	end
+end)
+
+local SpringJSlider = SpringDropdown:Slider("Jump Power", function(val)
+	if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 and plr.leaderstats.Glove.Value == "Spring" then
+		while plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 and plr.leaderstats.Glove.Value == "Spring" do
+			plr.Character.Humanoid.JumpPower = val
+			task.wait(0.1)
+		end
+	end
+end, 120, 50)
+
+local SpringSKeybindD = SpringDropdown:Dropdown("Keybind")
+
+local SpringSKToggle = SpringSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		springktoggle = true
+	else
+		springktoggle = false
+	end
+end)
+
+local SpringKeybind = SpringSKeybindD:Keybind("Key", function()
+	if springktoggle and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		game:GetService("ReplicatedStorage"):WaitForChild("SpringJump"):FireServer()
+	end
+end)
+
+
 local MagnetDropdown = SlapsGlovesSearchBar:Dropdown("Magnet") -- Args(<string> Name)
 
 local GetMagnetG = MagnetDropdown:Button("Get", function()
@@ -539,6 +626,67 @@ local MagnetS = MagnetDropdown:Button("Magnet", function()
 		end
 	end
 end)
+
+
+local SwapperDropdown = SlapsGlovesSearchBar:Dropdown("Swapper") -- Args(<string> Name)
+
+local GetSwapperG = SwapperDropdown:Button("Get", function()
+	GetGlove("Swapper")
+end)
+
+local SLOC = SwapperDropdown:Button("Swap Positions", function()
+	if canUseSLOC and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		local pos = plr.Character.HumanoidRootPart.Position
+
+		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
+
+		if SLOCSP then
+			task.wait(0.5)
+			plr.Character:MoveTo(pos)
+		end
+
+		canUseSLOC = false
+
+		task.wait(6.5)
+
+		canUseSLOC = true
+	end
+end)
+
+SwapperDropdown:Toggle("Save Position", function(val)
+	SLOCSP = val
+end)
+
+local SwapperSKeybindD = SwapperDropdown:Dropdown("Keybind")
+
+local SwapperSKToggle = SwapperSKeybindD:Toggle("Toggle", function(val)
+	if val then
+		swapperktoggle = true
+	else
+		swapperktoggle = false
+	end
+end)
+
+local SwapperKeybind = SwapperSKeybindD:Keybind("Key", function()
+	if swapperktoggle and canUseSLOC and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+		local pos = plr.Character.HumanoidRootPart.Position
+
+		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
+
+		if SLOCSP then
+			task.wait(0.5)
+			plr.Character:MoveTo(pos)
+		end
+
+		canUseSLOC = false
+
+		task.wait(6.5)
+
+		canUseSLOC = true
+	end
+end)
+
+
 
 local MagnetSKeybindD = MagnetDropdown:Dropdown("Keybind")
 
@@ -624,51 +772,6 @@ local MagnetKeybind = MagnetSKeybindD:Keybind("Key", function()
 		end
 	end
 end)
-
-
-local FlashDropdown = SlapsGlovesSearchBar:Dropdown("Flash") -- Args(<string> Name)
-
-local GetFlashG = FlashDropdown:Button("Get", function()
-	GetGlove("Flash")
-end)
-
-local FlashS = FlashDropdown:Button("Flash Teleport", function()
-	if canFlashS and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-		game:GetService("ReplicatedStorage"):WaitForChild("FlashTeleport"):FireServer()
-		canFlashS = false
-		task.wait(0.5)
-		plr.Character:MoveTo(plr.Character.HumanoidRootPart.Position + plr.Character.HumanoidRootPart.CFrame.LookVector * flashLenght)
-		task.wait(3)
-		canFlashS = true
-	end
-end)
-
-local FlashLenght = FlashDropdown:Slider("Lenght", function(val)
-	flashLenght = val
-end, 60,5)
-
-local FlashSKeybindD = FlashDropdown:Dropdown("Keybind")
-
-local FlashSKToggle = FlashSKeybindD:Toggle("Toggle", function(val)
-	if val then
-		flashktoggle = true
-	else
-		flashktoggle = false
-	end
-end)
-
-local FlashKeybind = FlashSKeybindD:Keybind("Key", function()
-	if canFlashS and flashktoggle and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-		game:GetService("ReplicatedStorage"):WaitForChild("FlashTeleport"):FireServer()
-		canFlashS = false
-		task.wait(0.5)
-		plr.Character:MoveTo(plr.Character.HumanoidRootPart.Position + plr.Character.HumanoidRootPart.CFrame.LookVector * flashLenght)
-		task.wait(3)
-		canFlashS = true
-	end
-end)
-
-
 
 local OrbitDropdown = BadgeGlovesSearchBar:Dropdown("Orbit") -- Args(<string> Name)
 
