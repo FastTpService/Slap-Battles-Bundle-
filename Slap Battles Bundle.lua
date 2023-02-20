@@ -640,12 +640,13 @@ local SLOC = SwapperDropdown:Button("Swap Positions", function()
 
 		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
 
+		canUseSLOC = false
+
 		if SLOCSP then
-			task.wait(0.5)
+			task.wait(0.2)
 			plr.Character:MoveTo(pos)
 		end
 
-		canUseSLOC = false
 
 		task.wait(6.5)
 
@@ -673,12 +674,14 @@ local SwapperKeybind = SwapperSKeybindD:Keybind("Key", function()
 
 		game:GetService("ReplicatedStorage"):WaitForChild("SLOC"):FireServer()
 
+		canUseSLOC = false
+
 		if SLOCSP then
-			task.wait(0.5)
+			task.wait(0.2)
 			plr.Character:MoveTo(pos)
 		end
 
-		canUseSLOC = false
+		
 
 		task.wait(6.5)
 
