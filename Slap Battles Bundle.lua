@@ -255,8 +255,10 @@ local function AnchorHRP(val)
     if not plr.Character and not plr.Character:FindFirstChild("HumanoidRootPart") then return end
     if val then
         plr.Character.HumanoidRootPart.Anchored = true
+        plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
     else
         plr.Character.HumanoidRootPart.Anchored = false
+        plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
     end
 end
 
@@ -1195,4 +1197,4 @@ local FreezeHRPKeybind = FrPlrDropdown:Keybind("Toggle Keybind", function()
 			
 		end)
 	end
-end, "X")
+end, "V")
