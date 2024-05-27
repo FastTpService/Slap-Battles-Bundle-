@@ -45,6 +45,9 @@ local ghostktoggle = false
 
 
 local freezePlr = false
+local antiragdoll = false
+
+local atCon
 
 local function SlapAura(on)
 	if on then
@@ -259,6 +262,22 @@ local function AnchorHRP(val)
     else
         plr.Character.HumanoidRootPart.Anchored = false
         plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
+    end
+end
+
+local function AntiRagdoll(val)
+    if not plr.Character and not plr.Character:FindFirstChild("HumanoidRootPart") then return end
+    if val then
+        plr.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0,0,0)
+        local hrp =  plr.Character.HumanoidRootPart
+        
+        if atCon then atCon:Disconnect() atCon = nil end
+        atCon = game:GetService("RunService").RenderStepped:Connect(function()
+            hrp.AssemblyLinearVelocity = Vector3.new(0,0,0)
+        end)
+    else
+        atCon:Disconnect()
+        atCon = nil
     end
 end
 
@@ -1134,7 +1153,16 @@ for i,v in pairs(Players:GetChildren()) do
 	end
 end
 
-
+local AntiRagdollTitle = MainAbSection:Title("Anti Ragdoll")
+local AntiRadgdollDropdown = MainAbSection:Dropdown("Anti Ragdoll")
+local AntiRagdollToggle = FrPlrDropdown:Toggle("Toggle",function(val)
+	if val then
+		antiragdoll = true
+	else
+		antiragdoll = false
+	end
+    AntiRagdoll(val)
+end)
 
 Players.PlayerAdded:Connect(function(v1)
 	if v1 ~= plr then
@@ -1198,3 +1226,22 @@ local FreezeHRPKeybind = FrPlrDropdown:Keybind("Toggle Keybind", function()
 		end)
 	end
 end, "V")
+
+
+local AntiRagdollKeybind = AntiRadgdollDropdown:Keybind("Toggle Keybind", function()
+	if not antiragdoll then
+		AntiRagdollToggle:Set(true, function(val)
+			antiragdoll = true
+			
+			AntiRagdoll(true)
+			
+		end)
+	else
+		AntiRagdollToggle:Set(false, function(val)
+			antiragdoll = false
+			
+			AntiRagdoll(false)
+			
+		end)
+	end
+end, "B")
