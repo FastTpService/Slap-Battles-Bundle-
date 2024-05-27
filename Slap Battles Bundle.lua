@@ -1084,11 +1084,11 @@ local SlapAuraToggle = SlapAuraDropdown:Toggle("Toggle",function(val)
 end)
 
 
-local SlapAuraSpeedS = SlapAuraDropdown:Slider("CD (0 = 0.2,1 = 0.5, 2 = 1; etc.)", function(val)
-	local num = val * 0.5
+local SlapAuraSpeedS = SlapAuraDropdown:Slider("CD (0 = 0.5,1 = 1, 2 = 1.5; etc.)", function(val)
+	local num = val * 0.75
 
 	if num == 0 then
-		num = 0.2
+		num = 0.5
 	end
 	if num > 0.1 and num < 3 then
 	end
