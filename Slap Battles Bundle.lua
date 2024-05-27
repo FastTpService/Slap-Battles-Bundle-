@@ -44,6 +44,7 @@ local usinginvis = false
 local ghostktoggle = false
 
 
+local freezePlr = false
 
 local function SlapAura(on)
 	if on then
@@ -250,6 +251,14 @@ local function AutoFarm(on)
 	end
 end
 
+local function AnchorHRP(val)
+    if not plr.Character and not plr.Character:FindFirstChild("HumanoidRootPart") then return end
+    if val then
+        plr.Character.HumanoidRootPart.Anchored = true
+    else
+        plr.Character.HumanoidRootPart.Anchored = false
+    end
+end
 
 local function GetGlove(glove)
 	if workspace.Lobby:FindFirstChild(glove) then
@@ -1087,6 +1096,17 @@ end, 2,0)
 
 local SlapAuraFilter = SlapAuraDropdown:SearchBar("Whitelist")
 
+local FreezePlrTitle = MainAbSection:Title("HRP Anchor")
+local FrPlrDropdown = MainAbSection:Dropdown("HRP Anchor")
+local FrPlrToggle = FrPlrDropdown:Toggle("Toggle",function(val)
+	if val then
+		freezePlr = true
+	else
+		freezePlr = false
+	end
+    AnchorHRP(val)
+end)
+
 for i,v in pairs(Players:GetChildren()) do
 	if v ~= plr then
 		local PlayerToggle = SlapAuraFilter:Toggle(v.Name, function(val)
@@ -1111,6 +1131,8 @@ for i,v in pairs(Players:GetChildren()) do
 		end)
 	end
 end
+
+
 
 Players.PlayerAdded:Connect(function(v1)
 	if v1 ~= plr then
@@ -1152,6 +1174,25 @@ local SlapAuraKeybind = SlapAuraDropdown:Keybind("Toggle Keybind", function()
 			OnSlapAura = false
 			
 			SlapAura(false)
+		end)
+	end
+end, "X")
+
+
+local FreezeHRPKeybind = FrPlrDropdown:Keybind("Toggle Keybind", function()
+	if not freezePlr then
+		FrPlrToggle:Set(true, function(val)
+			freezePlr = true
+			
+			AnchorHRP(true)
+			
+		end)
+	else
+		FrPlrToggle:Set(false, function(val)
+			freezePlr = false
+			
+			AnchorHRP(false)
+			
 		end)
 	end
 end, "X")
